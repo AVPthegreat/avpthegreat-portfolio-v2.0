@@ -1,12 +1,20 @@
 import React from 'react';
+import Navbar from './components/Navbar';
+import Hero from './components/Hero';
+import Bio from './components/Bio';
+import Work from './components/Work';
+import Contact from './components/Contact';
+import ScrollIndicator from './components/ScrollIndicator';
 
 function App() {
   return (
-    <div className="min-h-screen font-sans">
-      {/* Components will go here */}
-      <h1 className="text-3xl font-bold underline">
-        Hello world!
-      </h1>
+    <div className="h-screen w-full flex flex-row overflow-x-auto overflow-y-hidden snap-x snap-mandatory font-sans bg-[#fbfbf9] text-black">
+      <Navbar />
+      <ScrollIndicator />
+      <Hero portraitSrc="/portrait.png" />
+      <Bio portraitSrc="/portrait.png" />
+      <Work quarrySrc="/quarry.png" squadhubSrc="/squadhub.png" />
+      <Contact />
     </div>
   );
 }

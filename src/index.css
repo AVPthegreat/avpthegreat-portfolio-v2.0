@@ -1,8 +1,10 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', 'sans-serif';
+}
 
 body {
-  background-color: #fbfbf9; /* Light cream background from the design */
+  background-color: #fbfbf9;
   color: #000000;
 }
