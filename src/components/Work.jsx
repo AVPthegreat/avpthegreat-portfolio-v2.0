@@ -7,6 +7,7 @@ const Work = ({
   feelmitraMockupSrc,
   chessMockupSrc,
   nexuscodeMockupSrc,
+  darkMode,
 }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isLocked, setIsLocked] = useState(false);
@@ -105,7 +106,9 @@ const Work = ({
   return (
     <section
       id="work"
-      className="min-w-[100vw] h-screen flex flex-col justify-center bg-[#fbfbf9] text-black px-20 relative snap-start overflow-hidden group"
+      className={`min-w-[100vw] h-screen flex flex-col justify-center transition-colors duration-500 px-20 relative snap-start overflow-hidden group ${
+        darkMode ? "bg-[#030712] text-white" : "bg-[#fbfbf9] text-black"
+      }`}
       onWheel={handleWheel}
     >
       <div
@@ -113,19 +116,31 @@ const Work = ({
         onClick={prevSlide}
         onMouseEnter={() => !isLocked && prevSlide()}
       >
-        <div className="w-1 h-32 bg-black/5 rounded-full opacity-0 group-hover/left:opacity-100 transition-opacity" />
+        <div
+          className={`w-1 h-32 rounded-full opacity-0 group-hover/left:opacity-100 transition-opacity ${
+            darkMode ? "bg-white/20" : "bg-black/5"
+          }`}
+        />
       </div>
       <div
         className="absolute right-0 top-0 w-32 h-full z-30 cursor-pointer flex items-center justify-center group/right"
         onClick={nextSlide}
         onMouseEnter={() => !isLocked && nextSlide()}
       >
-        <div className="w-1 h-32 bg-black/5 rounded-full opacity-0 group-hover/right:opacity-100 transition-opacity" />
+        <div
+          className={`w-1 h-32 rounded-full opacity-0 group-hover/right:opacity-100 transition-opacity ${
+            darkMode ? "bg-white/20" : "bg-black/5"
+          }`}
+        />
       </div>
 
       <div className="w-full max-w-7xl mx-auto h-full flex flex-col justify-center relative pointer-events-none">
         <div className="mb-12 z-10">
-          <h2 className="text-[8vw] font-bold leading-[0.85] tracking-tight pointer-events-auto">
+          <h2
+            className={`text-[8vw] font-bold leading-[0.85] tracking-tight pointer-events-auto transition-colors duration-500 ${
+              darkMode ? "text-[#E65C9C]" : "text-black"
+            }`}
+          >
             Featured <br />
             Projects
           </h2>
@@ -237,7 +252,13 @@ const Work = ({
               key={idx}
               onClick={() => setCurrentSlide(idx)}
               className={`w-3 h-3 rounded-full transition-all duration-300 cursor-pointer ${
-                currentSlide === idx ? "w-8 bg-black" : "bg-gray-300"
+                currentSlide === idx
+                  ? darkMode
+                    ? "w-8 bg-white"
+                    : "w-8 bg-black"
+                  : darkMode
+                  ? "bg-gray-700"
+                  : "bg-gray-300"
               }`}
             />
           ))}

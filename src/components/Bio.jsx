@@ -1,16 +1,22 @@
 import React from "react";
 
-const Bio = ({ portraitSrc }) => {
+const Bio = ({ portraitSrc, darkMode }) => {
   return (
     <section
       id="bio-details"
-      className="min-w-[100vw] h-screen flex items-center justify-center bg-[#fbfbf9] text-black px-20 relative snap-start"
+      className={`min-w-[100vw] h-screen flex items-center justify-center transition-colors duration-500 px-20 relative snap-start ${
+        darkMode ? "bg-[#030712] text-white" : "bg-[#fbfbf9] text-black"
+      }`}
     >
       <div className="grid grid-cols-3 gap-12 w-full max-w-7xl items-end">
         {/* Left Column */}
         <div className="flex flex-col justify-between h-full min-h-[60vh]">
           <div className="relative">
-            <h2 className="text-[12vw] font-bold leading-[0.8] tracking-tighter italic">
+            <h2
+              className={`text-[12vw] font-bold leading-[0.8] tracking-tighter italic transition-colors duration-500 ${
+                darkMode ? "text-[#E65C9C]" : "text-black"
+              }`}
+            >
               Hey!
             </h2>
             {/* Smiley Face Graphic */}

@@ -1,16 +1,22 @@
 import React from "react";
 import { Linkedin, Github, Mail, Phone, MapPin } from "lucide-react";
 
-const Contact = () => {
+const Contact = ({ darkMode }) => {
   return (
     <section
       id="contact"
-      className="min-w-[100vw] h-screen bg-black text-white flex flex-col justify-between p-12 relative snap-start"
+      className={`min-w-[100vw] h-screen flex flex-col justify-between p-12 relative snap-start transition-colors duration-500 ${
+        darkMode ? "bg-[#030712] text-white" : "bg-black text-white"
+      }`}
     >
       {/* Top Section */}
       <div className="flex justify-between items-start mt-20">
         {/* Main Heading */}
-        <h1 className="text-[8vw] font-bold leading-[0.9] tracking-tighter max-w-4xl">
+        <h1
+          className={`text-[8vw] font-bold leading-[0.9] tracking-tighter max-w-4xl transition-colors duration-500 ${
+            darkMode ? "text-[#E65C9C]" : "text-white"
+          }`}
+        >
           Building <br />
           Products <br />
           that Matter.
@@ -109,7 +115,12 @@ const Contact = () => {
         <div className="flex items-center justify-between border-b border-gray-800 pb-4 mb-4">
           <div className="flex items-center gap-4">
             {/* Logo Icon */}
-            <svg viewBox="0 0 100 100" className="w-32 h-32 text-white">
+            <svg
+              viewBox="0 0 100 100"
+              className={`w-32 h-32 transition-colors duration-500 ${
+                darkMode ? "text-[#E65C9C]" : "text-white"
+              }`}
+            >
               <circle
                 cx="50"
                 cy="50"
@@ -131,7 +142,11 @@ const Contact = () => {
                 fill="none"
               />
             </svg>
-            <span className="text-[6.84vw] font-bold tracking-tighter leading-none">
+            <span
+              className={`text-[6.84vw] font-bold tracking-tighter leading-none transition-colors duration-500 ${
+                darkMode ? "text-[#E65C9C]" : "text-white"
+              }`}
+            >
               ANANT VARDHAN PANDEY
             </span>
           </div>
