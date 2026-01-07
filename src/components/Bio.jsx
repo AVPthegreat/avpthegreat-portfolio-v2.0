@@ -58,14 +58,13 @@ const Bio = ({ portraitSrc }) => {
 
           <div className="space-y-8 text-lg font-medium leading-relaxed max-w-xs">
             <p>
-              I’m a Computer Science student dedicated to building high-impact
-              software. I thrive on challenges that push the boundaries of
-              conventional architecture. 10+ hackathon wins later, I’m currently
-              architecting NexusCode.
+              I’m a Computer Science student, I love building on challenges that
+              push the boundaries of conventional architecture. 10+ hackathon
+              wins and, I’m currently architecting NexusCode.
             </p>
             <p>
-              A serial builder who prioritizes rapid iteration, swift execution,
-              and the ability to pivot without losing momentum.
+              A repeatable founder who can kill ideas, partner fast, and rebuild
+              from zero without identity loss
             </p>
           </div>
         </div>
