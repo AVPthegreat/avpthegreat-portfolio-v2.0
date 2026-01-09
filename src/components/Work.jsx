@@ -1,5 +1,58 @@
-import React, { useState } from "react";
-import { Github, ExternalLink } from "lucide-react";
+import React, { useRef, useState } from "react";
+import { motion as Motion, useScroll, useTransform } from "framer-motion";
+import { Github, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react";
+
+const ProjectCard = ({ project, darkMode }) => {
+  return (
+    <div className="relative w-full h-[65vh] lg:h-[75vh] rounded-[2.5rem] overflow-hidden shadow-2xl group shrink-0">
+      {project.image ? (
+        <img
+          src={project.image}
+          alt={project.title}
+          className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+        />
+      ) : (
+        <div className="w-full h-full bg-gray-900 flex items-center justify-center">
+          <Github size={64} className="text-white opacity-20" />
+        </div>
+      )}
+
+      {/* Overlay Content */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex flex-col justify-end p-10 lg:p-16 transition-opacity duration-500 opacity-95 group-hover:opacity-100">
+        <div className="transform translate-y-6 group-hover:translate-y-0 transition-transform duration-700 ease-out">
+          <h3
+            className={`text-5xl lg:text-7xl font-bold mb-6 transition-colors duration-500 font-serif ${
+              darkMode ? "text-[#E65C9C]" : "text-white"
+            }`}
+          >
+            {project.title}
+          </h3>
+          <p className="text-gray-300 text-xl lg:text-2xl mb-10 max-w-3xl line-clamp-2 font-medium leading-relaxed">
+            {project.subtitle}
+          </p>
+          <div className="flex gap-8">
+            <a
+              href={project.live}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-10 py-5 bg-white/10 hover:bg-[#E65C9C] hover:text-white backdrop-blur-xl rounded-full text-white text-xl font-bold transition-all flex items-center gap-3 border border-white/10"
+            >
+              <ExternalLink size={24} /> Live Demo
+            </a>
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-10 py-5 bg-white/10 hover:bg-[#E65C9C] hover:text-white backdrop-blur-xl rounded-full text-white text-xl font-bold transition-all flex items-center gap-3 border border-white/10"
+            >
+              <Github size={24} /> GitHub
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Work = ({
   wallifyMockupSrc,
@@ -9,259 +62,160 @@ const Work = ({
   nexuscodeMockupSrc,
   darkMode,
 }) => {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isLocked, setIsLocked] = useState(false);
-
-  const slides = [
+  const [currentIndex, setCurrentIndex] = useState(4); // Start with NexusCode (index 4)
+  const projects = [
     {
-      id: "slide-1",
-      projects: [
-        {
-          title: "/Yukti Bharat",
-          subtitle: "Career Advisor Platform",
-          image: yuktiMockupSrc,
-          live: "https://yuktibharat.com",
-          github: "#",
-          dark: true,
-        },
-        {
-          title: "/FeelMitra",
-          subtitle: "Mental Wellbeing Platform",
-          image: feelmitraMockupSrc,
-          live: "#",
-          github: "#",
-          dark: false,
-        },
-      ],
+      title: "/Yukti Bharat",
+      subtitle:
+        "Career Advisor Platform designed to empower the youth of India with data-driven career choices.",
+      image: yuktiMockupSrc,
+      live: "https://yuktibharat.com",
+      github: "#",
     },
     {
-      id: "slide-2",
-      projects: [
-        {
-          title: "/Chess",
-          subtitle: "React-based rating manager",
-          image: chessMockupSrc,
-          live: "#",
-          github: "#",
-          dark: false,
-        },
-        {
-          title: "/Wallify",
-          subtitle: "Sleek dark-themed wallpaper app",
-          image: wallifyMockupSrc,
-          live: "#",
-          github: "#",
-          dark: true,
-        },
-      ],
+      title: "/FeelMitra",
+      subtitle:
+        "A mental wellbeing companion focused on providing accessible emotional support through AI.",
+      image: feelmitraMockupSrc,
+      live: "#",
+      github: "#",
     },
     {
-      id: "slide-3",
-      projects: [
-        {
-          title: "/NexusCode",
-          subtitle: "Online Code Judge Platform",
-          image: nexuscodeMockupSrc,
-          live: "#",
-          github: "#",
-          dark: true,
-        },
-        {
-          isCTA: true,
-          title: "/More Projects",
-          subtitle: "Open Source & Experiments",
-          github: "https://github.com/avpthegreat",
-        },
-      ],
+      title: "/Chess",
+      subtitle:
+        "A React-based rating manager for local chess communities and tournament organization.",
+      image: chessMockupSrc,
+      live: "#",
+      github: "#",
+    },
+    {
+      title: "/Wallify",
+      subtitle:
+        "A minimalist wallpaper application with curated high-resolution dark-themed assets.",
+      image: wallifyMockupSrc,
+      live: "#",
+      github: "#",
+    },
+    {
+      title: "/NexusCode",
+      subtitle:
+        "A secure, robust online judge platform for competitive programming and hiring assessments.",
+      image: nexuscodeMockupSrc,
+      live: "#",
+      github: "#",
     },
   ];
 
   const nextSlide = () => {
-    if (isLocked) return;
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-    lockInteraction();
+    setCurrentIndex((prev) => (prev + 1) % projects.length);
   };
 
   const prevSlide = () => {
-    if (isLocked) return;
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-    lockInteraction();
+    setCurrentIndex((prev) => (prev - 1 + projects.length) % projects.length);
   };
 
-  const lockInteraction = () => {
-    setIsLocked(true);
-    setTimeout(() => setIsLocked(false), 800);
-  };
-
-  const handleWheel = (e) => {
-    if (Math.abs(e.deltaX) > Math.abs(e.deltaY) || Math.abs(e.deltaY) > 50) {
-      if (e.deltaX > 0 || e.deltaY > 50) {
-        nextSlide();
-      } else if (e.deltaX < 0 || e.deltaY < -50) {
-        prevSlide();
-      }
-    }
-  };
+  const headerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: headerRef,
+    offset: ["start end", "end start"],
+  });
+  const headerY = useTransform(scrollYProgress, [0, 1], [0, 120]);
 
   return (
     <section
       id="work"
-      className={`min-w-[100vw] h-screen flex flex-col justify-center transition-colors duration-500 px-20 relative snap-start overflow-hidden group ${
-        darkMode ? "bg-[#030712] text-white" : "bg-[#fbfbf9] text-black"
-      }`}
-      onWheel={handleWheel}
+      className="w-full relative px-8 lg:px-24 bg-transparent py-40 z-10 overflow-hidden"
     >
-      <div
-        className="absolute left-0 top-0 w-32 h-full z-30 cursor-pointer flex items-center justify-center group/left"
-        onClick={prevSlide}
-        onMouseEnter={() => !isLocked && prevSlide()}
+      <Motion.div
+        ref={headerRef}
+        style={{ y: headerY }}
+        className="max-w-7xl mx-auto mb-24"
       >
-        <div
-          className={`w-1 h-32 rounded-full opacity-0 group-hover/left:opacity-100 transition-opacity ${
-            darkMode ? "bg-white/20" : "bg-black/5"
+        <h2
+          className={`text-[12vw] font-bold leading-none tracking-tight transition-colors duration-500 font-serif ${
+            darkMode ? "text-white" : "text-black"
           }`}
-        />
-      </div>
-      <div
-        className="absolute right-0 top-0 w-32 h-full z-30 cursor-pointer flex items-center justify-center group/right"
-        onClick={nextSlide}
-        onMouseEnter={() => !isLocked && nextSlide()}
-      >
-        <div
-          className={`w-1 h-32 rounded-full opacity-0 group-hover/right:opacity-100 transition-opacity ${
-            darkMode ? "bg-white/20" : "bg-black/5"
-          }`}
-        />
-      </div>
-
-      <div className="w-full max-w-7xl mx-auto h-full flex flex-col justify-center relative pointer-events-none">
-        <div className="mb-12 z-10">
-          <h2
-            className={`text-[8vw] font-bold leading-[0.85] tracking-tight pointer-events-auto transition-colors duration-500 ${
-              darkMode ? "text-[#E65C9C]" : "text-black"
-            }`}
-          >
-            Featured <br />
+        >
+          Featured <br />
+          <span className={darkMode ? "text-[#E65C9C]" : "text-black italic"}>
             Projects
-          </h2>
+          </span>
+        </h2>
+      </Motion.div>
+
+      {/* Carousel Container */}
+      <div className="relative max-w-7xl mx-auto">
+        <div className="relative overflow-hidden pt-4 pb-8">
+          <Motion.div
+            className="flex gap-10"
+            animate={{
+              x: `calc(-${currentIndex * 100}% - ${currentIndex * 2.5}rem)`,
+            }}
+            transition={{ type: "spring", stiffness: 200, damping: 25 }}
+          >
+            {projects.map((project, idx) => (
+              <ProjectCard key={idx} project={project} darkMode={darkMode} />
+            ))}
+          </Motion.div>
         </div>
 
-        <div className="relative overflow-hidden w-full pointer-events-auto">
-          <div
-            className="flex transition-transform duration-700 ease-in-out"
-            style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-          >
-            {slides.map((slide) => (
-              <div
-                key={slide.id}
-                className="min-w-full grid grid-cols-2 gap-16 pr-4"
-              >
-                {slide.projects.map((project, pIdx) => (
-                  <div key={pIdx} className="flex flex-col gap-4">
-                    {project.isCTA ? (
-                      <>
-                        <div>
-                          <h3 className="text-5xl font-bold mb-2">
-                            {project.title}
-                          </h3>
-                          <p className="text-lg text-gray-600">
-                            {project.subtitle}
-                          </p>
-                        </div>
-                        <div className="aspect-[4/3] bg-gray-900 rounded-3xl overflow-hidden shadow-2xl relative group/cta flex flex-col items-center justify-center p-8 text-center border border-gray-100">
-                          <Github
-                            size={64}
-                            className="text-white mb-6 animate-pulse"
-                          />
-                          <h4 className="text-white text-2xl font-bold mb-2">
-                            Visit GitHub for amazing projects
-                          </h4>
-                          <p className="text-gray-400">
-                            See more of my open-source work and creative
-                            experiments.
-                          </p>
-                          <div className="absolute inset-0 bg-black/80 opacity-0 group-hover/cta:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                            <a
-                              href={project.github}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-2 text-white text-2xl font-bold hover:text-pink-300 transition-colors px-8 py-4 border-2 border-white rounded-full"
-                            >
-                              <Github size={32} /> View Profile
-                            </a>
-                          </div>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div>
-                          <h3 className="text-5xl font-bold mb-2">
-                            {project.title}
-                          </h3>
-                          <p className="text-lg text-gray-600">
-                            {project.subtitle}
-                          </p>
-                        </div>
-                        <div
-                          className={`aspect-[4/3] ${
-                            project.dark ? "bg-gray-900" : "bg-gray-100"
-                          } rounded-3xl overflow-hidden shadow-2xl relative group/item flex items-center justify-center`}
-                        >
-                          {project.image ? (
-                            <img
-                              src={project.image}
-                              alt={project.title}
-                              className="w-full h-full object-cover transition-transform duration-700 group-hover/item:scale-105"
-                            />
-                          ) : (
-                            <span className="text-gray-400 text-xl font-mono">
-                              Image Coming Soon
-                            </span>
-                          )}
-                          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/item:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-8">
-                            <a
-                              href={project.live}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-2 text-white text-xl font-bold hover:text-pink-300 transition-colors"
-                            >
-                              <ExternalLink size={24} /> Live
-                            </a>
-                            <a
-                              href={project.github}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-2 text-white text-xl font-bold hover:text-pink-300 transition-colors"
-                            >
-                              <Github size={24} /> GitHub
-                            </a>
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                ))}
-              </div>
+        {/* Navigation Interface */}
+        <div className="flex flex-col lg:flex-row justify-between lg:items-center mt-12 gap-8">
+          {/* Controls */}
+          <div className="flex items-center gap-6">
+            <button
+              onClick={prevSlide}
+              className={`p-6 rounded-full border-2 transition-all duration-300 ${
+                darkMode
+                  ? "border-[#E65C9C]/30 text-[#E65C9C] hover:border-[#E65C9C] hover:bg-[#E65C9C]/10"
+                  : "border-black/10 text-black hover:border-black hover:bg-black/5"
+              }`}
+            >
+              <ChevronLeft size={36} strokeWidth={2.5} />
+            </button>
+            <button
+              onClick={nextSlide}
+              className={`p-6 rounded-full border-2 transition-all duration-300 ${
+                darkMode
+                  ? "border-[#E65C9C]/30 text-[#E65C9C] hover:border-[#E65C9C] hover:bg-[#E65C9C]/10"
+                  : "border-black/10 text-black hover:border-black hover:bg-black/5"
+              }`}
+            >
+              <ChevronRight size={36} strokeWidth={2.5} />
+            </button>
+
+            {/* Pagination Numbers */}
+            <div
+              className={`text-2xl font-bold ml-4 tracking-tighter ${
+                darkMode ? "text-[#E65C9C]/50" : "text-black/30"
+              }`}
+            >
+              <span className={darkMode ? "text-[#E65C9C]" : "text-black"}>
+                {(currentIndex + 1).toString().padStart(2, "0")}
+              </span>
+              <span className="mx-2">/</span>
+              <span>{projects.length.toString().padStart(2, "0")}</span>
+            </div>
+          </div>
+
+          {/* Progress Indicators */}
+          <div className="flex gap-4">
+            {projects.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentIndex(idx)}
+                className={`transition-all duration-500 rounded-full h-3 ${
+                  currentIndex === idx
+                    ? darkMode
+                      ? "w-20 bg-[#E65C9C]"
+                      : "w-20 bg-black"
+                    : darkMode
+                    ? "w-3 bg-[#E65C9C]/20 hover:bg-[#E65C9C]/40"
+                    : "w-3 bg-gray-200 hover:bg-gray-300"
+                }`}
+              />
             ))}
           </div>
-        </div>
-
-        <div className="flex justify-center gap-3 mt-12 pointer-events-auto">
-          {slides.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => setCurrentSlide(idx)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 cursor-pointer ${
-                currentSlide === idx
-                  ? darkMode
-                    ? "w-8 bg-white"
-                    : "w-8 bg-black"
-                  : darkMode
-                  ? "bg-gray-700"
-                  : "bg-gray-300"
-              }`}
-            />
-          ))}
         </div>
       </div>
     </section>

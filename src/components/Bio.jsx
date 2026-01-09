@@ -1,19 +1,34 @@
-import React from "react";
+import React, { useRef } from "react";
+import { motion as Motion, useScroll, useTransform } from "framer-motion";
 
 const Bio = ({ portraitSrc, darkMode }) => {
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"],
+  });
+
+  const column1Y = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const column2Y = useTransform(scrollYProgress, [0, 1], [-50, 50]);
+  const column3Y = useTransform(scrollYProgress, [0, 1], [50, -50]);
+
   return (
     <section
-      id="bio-details"
-      className={`min-w-[100vw] h-screen flex items-center justify-center transition-colors duration-500 px-20 relative snap-start ${
-        darkMode ? "bg-[#030712] text-white" : "bg-[#fbfbf9] text-black"
+      ref={containerRef}
+      id="bio"
+      className={`w-full min-h-screen flex items-center justify-center transition-colors duration-500 px-20 relative bg-transparent ${
+        darkMode ? "text-white" : "text-black"
       }`}
     >
-      <div className="grid grid-cols-3 gap-12 w-full max-w-7xl items-end">
+      <div className="grid grid-cols-3 gap-12 w-full max-w-7xl items-end relative z-10">
         {/* Left Column */}
-        <div className="flex flex-col justify-between h-full min-h-[60vh]">
+        <Motion.div
+          style={{ y: column1Y }}
+          className="flex flex-col justify-between h-full min-h-[60vh]"
+        >
           <div className="relative">
             <h2
-              className={`text-[12vw] font-bold leading-[0.8] tracking-tighter italic transition-colors duration-500 ${
+              className={`text-[12vw] font-bold leading-[0.8] tracking-tighter italic transition-colors duration-500 font-serif ${
                 darkMode ? "text-[#E65C9C]" : "text-black"
               }`}
             >
@@ -35,7 +50,7 @@ const Bio = ({ portraitSrc, darkMode }) => {
           </div>
 
           <div className="mt-auto">
-            <h3 className="text-4xl font-bold leading-tight mb-2">
+            <h3 className="text-4xl font-bold leading-tight mb-2 font-serif">
               A<br />
               Startup-minded{" "}
               <span className="italic">Full Stack Developer</span>,<br />
@@ -45,10 +60,13 @@ const Bio = ({ portraitSrc, darkMode }) => {
               experience
             </h3>
           </div>
-        </div>
+        </Motion.div>
 
         {/* Center Column - Portrait */}
-        <div className="relative h-[70vh] w-full rounded-3xl overflow-hidden">
+        <Motion.div
+          style={{ y: column2Y }}
+          className="relative h-[70vh] w-full rounded-3xl overflow-hidden shadow-2xl"
+        >
           {portraitSrc && (
             <img
               src={portraitSrc}
@@ -56,10 +74,13 @@ const Bio = ({ portraitSrc, darkMode }) => {
               className="w-full h-full object-cover"
             />
           )}
-        </div>
+        </Motion.div>
 
         {/* Right Column */}
-        <div className="flex flex-col justify-between h-full min-h-[60vh]">
+        <Motion.div
+          style={{ y: column3Y }}
+          className="flex flex-col justify-between h-full min-h-[60vh]"
+        >
           <div className="text-lg font-medium">(02)</div>
 
           <div className="space-y-8 text-lg font-medium leading-relaxed max-w-xs">
@@ -73,7 +94,7 @@ const Bio = ({ portraitSrc, darkMode }) => {
               from zero without identity loss
             </p>
           </div>
-        </div>
+        </Motion.div>
       </div>
     </section>
   );
