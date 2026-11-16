@@ -19,7 +19,6 @@ export const contact = {
   links: [
     { label: "GitHub", href: "https://github.com/AVPthegreat" },
     { label: "LinkedIn", href: "https://www.linkedin.com/in/avpthegreat/" },
-    { label: "Blog", href: "https://blog.avpthegreat.tech" },
   ],
 };
 
