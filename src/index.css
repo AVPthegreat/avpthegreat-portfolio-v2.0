@@ -1,19 +1,82 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", "sans-serif";
-  --font-serif: "Playfair Display", "serif";
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --color-cream: #f5f0e6;
+  --color-ink: #111111;
+  --color-muted: #55504a;
+  --color-rule: #d9d0bf;
+  --color-accent: #9a3412;
 }
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background-color: #030712;
-  color: #ffffff;
   margin: 0;
-  padding: 0;
-  overflow-x: hidden;
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.link {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  overflow-wrap: anywhere;
+}
+.link:hover { color: var(--color-accent); text-decoration-thickness: 2px; }
+
+.navlink { color: var(--color-ink); text-decoration: none; }
+.navlink:hover { color: var(--color-accent); text-decoration: underline; text-underline-offset: 4px; }
+
+.btn {
+  display: inline-block;
+  background: var(--color-ink);
+  color: var(--color-cream);
+  padding: 0.55rem 1.1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+}
+.btn:hover { background: var(--color-accent); }
+
+a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.skip {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  background: var(--color-ink);
+  color: var(--color-cream);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  z-index: 10;
+}
+.skip:focus { top: 1rem; }
+
+section[id], #top { scroll-margin-top: 1.5rem; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .fade { animation: fade 0.5s ease-out both; }
+  @keyframes fade {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
 }
